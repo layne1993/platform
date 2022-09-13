@@ -13,6 +13,7 @@ export class ToolsService {
     return d.getTime();
   }
 
+  // test
   getDay() {
     const day = format(new Date(), 'YYYYMMDD');
     return day;
