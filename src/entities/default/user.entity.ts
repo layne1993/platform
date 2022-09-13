@@ -15,6 +15,11 @@ import { Goods } from './goods.entity';
 import { BusinessException } from 'src/common/exceptions/business.exception';
 import { Order } from './order.entity';
 
+export enum UserStatus {
+  disabled = 'disabled',
+  enabled = 'enabled',
+}
+
 @Entity('defaultUser')
 export class DefaultUser {
   @PrimaryGeneratedColumn('uuid')
@@ -43,6 +48,13 @@ export class DefaultUser {
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.enabled,
+  })
+  status?: string;
 
   @CreateDateColumn()
   createDate?: Timestamp;

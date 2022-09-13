@@ -3,11 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 import { compareSync } from 'bcrypt';
 import { LoginUserDto, UserInfoDto } from 'src/dtos/auth.dto';
 import { AdminUserService } from 'src/service/admin/user/user.service';
+import { DefaultUserService } from 'src/service/default/user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly adminUserService: AdminUserService,
+    private readonly defaultUserService: DefaultUserService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -15,6 +17,10 @@ export class AuthService {
     let existUser;
     if (loginUserDto.source === 'admin') {
       existUser = await this.adminUserService.getUserByName(
+        loginUserDto.username,
+      );
+    } else {
+      existUser = await this.defaultUserService.getUserByName(
         loginUserDto.username,
       );
     }
@@ -40,6 +46,8 @@ export class AuthService {
     let existUser;
     if (payload.source === 'admin') {
       existUser = await this.adminUserService.getUserById(payload.id);
+    } else {
+      existUser = await this.defaultUserService.getUserById(payload.id);
     }
 
     if (!existUser) {

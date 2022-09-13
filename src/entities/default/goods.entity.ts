@@ -25,6 +25,11 @@ export enum PublishStatus {
   publish = 1,
 }
 
+export enum CommendStatus {
+  undone = 0,
+  done = 1,
+}
+
 @Entity('goods')
 export class Goods {
   @PrimaryGeneratedColumn('uuid')
@@ -40,7 +45,7 @@ export class Goods {
   thumb: string;
 
   @Column()
-  price: string;
+  price: number;
 
   @ManyToOne(() => DefaultUser, (user) => user.saleGoods)
   saleman: DefaultUser;
@@ -72,7 +77,7 @@ export class Goods {
   changedTradeCount?: number;
 
   @OneToMany(() => GoodsImg, (goodImg) => goodImg.goods)
-  imgs?: GoodsImg[];
+  imgs: GoodsImg[];
 
   @CreateDateColumn()
   createDate?: Timestamp;
@@ -99,4 +104,11 @@ export class Goods {
 
   @ManyToOne(() => Catego, (catego) => catego.goods)
   catego: Catego;
+
+  @Column({
+    type: 'enum',
+    enum: CommendStatus,
+    default: CommendStatus.undone,
+  })
+  commend?: number;
 }

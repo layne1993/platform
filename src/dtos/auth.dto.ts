@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+
+export enum LOGIN_TYPE {
+  admin = 'admin',
+  default = 'default',
+}
 
 export class LoginUserDto {
   @IsNotEmpty()
@@ -10,8 +15,8 @@ export class LoginUserDto {
   password: string;
 
   @IsNotEmpty()
-  @IsString()
-  source: string;
+  @IsEnum(LOGIN_TYPE)
+  source: LOGIN_TYPE;
 }
 
 export class UserInfoDto {

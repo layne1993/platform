@@ -54,4 +54,43 @@ export class ToolsService {
       }
     });
   }
+
+  async uploadFiles(files): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (files && files.length) {
+        // 获取当前日期
+        const day = this.getDay();
+        const d = this.getTime();
+
+        // 根据日期创建目录
+        const dir = path.join(__dirname, '../../../public/upload', day);
+        mkdirp.sync(dir);
+
+        const saveDirs = [];
+        for (const file of files) {
+          const uploadDir = path.join(dir, d + extname(file.originalname));
+
+          // 实现上传
+          const writeImage = createWriteStream(uploadDir);
+          writeImage.write(file.buffer);
+          writeImage.end();
+          writeImage.on('finish', () => {
+            // 4、返回图片保存的地址
+            const saveDir = path.join(
+              'upload',
+              day,
+              d + extname(file.originalname),
+            );
+            saveDirs.push({
+              uploadDir,
+              saveDir,
+            });
+          });
+        }
+        resolve(saveDirs);
+      } else {
+        resolve([]);
+      }
+    });
+  }
 }

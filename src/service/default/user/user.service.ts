@@ -32,4 +32,18 @@ export class DefaultUserService {
     await this.userRepository.save(newUser);
     return true;
   }
+
+  // 根据id获取用户详情
+  async getUserById(id: string) {
+    return this.userRepository.findOneBy({ id });
+  }
+
+  // 根据用户名获取用户详情
+  async getUserByName(username: string) {
+    return this.userRepository
+      .createQueryBuilder('defaultUser')
+      .addSelect('defaultUser.password')
+      .where('defaultUser.username=:username', { username })
+      .getOne();
+  }
 }

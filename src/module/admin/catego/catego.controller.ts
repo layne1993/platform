@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { Public } from 'src/auth/constant';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateCategoDto } from 'src/dtos/admin/catego.dto';
@@ -19,5 +27,11 @@ export class CategoController {
   @Post('insert')
   async addCatego(@Body() categoDto: CreateCategoDto) {
     return this.categoService.addCatego(categoDto);
+  }
+
+  // 删除分类
+  @Delete(':id')
+  async deleteCatego(@Param('id') id: string) {
+    return this.categoService.deleteCatego(id);
   }
 }

@@ -40,4 +40,23 @@ export class AuthController {
     // 使用Passport后，会将解析后的token信息挂载到req.user上
     return req.user;
   }
+
+  // 商城登录
+  @Post('default/login')
+  async defaultLogin(@Body() loginUser: LoginUserDto) {
+    try {
+      const user = await this.authService.validateUser(loginUser);
+      return this.authService.login(user);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // 商城验证
+  @UseGuards(JwtAuthGuard)
+  @Get('default/profile')
+  defaultMe(@Req() req: Request) {
+    // 使用Passport后，会将解析后的token信息挂载到req.user上
+    return req.user;
+  }
 }
